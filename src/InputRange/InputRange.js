@@ -14,10 +14,10 @@ import { maxMinValuePropType } from './propTypes';
 /**
  * An keyboard key codes
  */
-const DOWN_ARROW: 40,
-const LEFT_ARROW: 37,
-const RIGHT_ARROW: 39,
-const UP_ARROW: 38,
+const DOWN_ARROW = 40;
+const LEFT_ARROW = 37;
+const RIGHT_ARROW = 39;
+const UP_ARROW = 38;
 
 /**
  * Check if values are within the max and min range of inputRange
@@ -159,7 +159,7 @@ function renderSliders(inputRange) {
   const values = valueTransformer.valuesFromProps(inputRange);
   const percentages = valueTransformer.percentagesFromValues(inputRange, values);
 
-  return keys.map(function (key) {
+  return keys.map(function(key) {
     const value = values[key];
     const percentage = percentages[key];
     const ref = `slider${captialize(key)}`;
@@ -184,10 +184,10 @@ function renderSliders(inputRange) {
         onSliderMouseMove={ inputRange.handleSliderMouseMove }
         percentage={ percentage }
         ref={ ref }
-        type={ key }§
+        type={ key }
         value={ value } />
     );
-  })
+  });
 }
 
 /**
@@ -197,10 +197,9 @@ function renderSliders(inputRange) {
  * @return {Array.<string>} Array of HTML
  */
 function renderHiddenInputs(inputRange) {
-  const inputs = [];
   const keys = getKeys(inputRange);
 
-  return keys.map(function (key) {
+  return keys.map(function(key) {
     const name = inputRange.isMultiValue ? `${inputRange.props.name}${captialize(key)}` : inputRange.props.name;
 
     return (
