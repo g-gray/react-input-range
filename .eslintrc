@@ -8,6 +8,10 @@ rules:
   semi:
     - 2
     - always
+  func-names: 0
+  react/no-multi-comp:
+    - 0
+    - ignoreStateless: false
   react/jsx-boolean-value:
     - 2
     - always
