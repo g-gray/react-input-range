@@ -159,7 +159,7 @@ function renderSliders(inputRange) {
   const values = valueTransformer.valuesFromProps(inputRange);
   const percentages = valueTransformer.percentagesFromValues(inputRange, values);
 
-  return keys.map(function(key) {
+  return keys.map(key => {
     const value = values[key];
     const percentage = percentages[key];
     const ref = `slider${captialize(key)}`;
@@ -186,24 +186,6 @@ function renderSliders(inputRange) {
         ref={ ref }
         type={ key }
         value={ value } />
-    );
-  });
-}
-
-/**
- * Get an array of hidden input HTML for rendering
- * @private
- * @param {InputRange} inputRange - React component
- * @return {Array.<string>} Array of HTML
- */
-function renderHiddenInputs(inputRange) {
-  const keys = getKeys(inputRange);
-
-  return keys.map(function(key) {
-    const name = inputRange.isMultiValue ? `${inputRange.props.name}${captialize(key)}` : inputRange.props.name;
-
-    return (
-      <input type="hidden" name={ name }/>
     );
   });
 }
@@ -542,8 +524,6 @@ export default class InputRange extends React.Component {
           containerClassName={ classNames.labelContainer }>
           { this.props.maxValue }
         </Label>
-
-        { renderHiddenInputs(this) }
       </div>
     );
   }
