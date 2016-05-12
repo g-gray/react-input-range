@@ -12,21 +12,12 @@ import { autobind, captialize, distanceTo, isDefined, isObject, length } from '.
 import { maxMinValuePropType } from './propTypes';
 
 /**
- * A map for storing internal members
- * @const {WeakMap}
+ * An keyboard key codes
  */
-const internals = new WeakMap();
-
-/**
- * An object storing keyboard key codes
- * @const {Object.<string, number>}
- */
-const KeyCode = {
-  DOWN_ARROW: 40,
-  LEFT_ARROW: 37,
-  RIGHT_ARROW: 39,
-  UP_ARROW: 38,
-};
+const DOWN_ARROW: 40,
+const LEFT_ARROW: 37,
+const RIGHT_ARROW: 39,
+const UP_ARROW: 38,
 
 /**
  * Check if values are within the max and min range of inputRange
@@ -164,12 +155,11 @@ function getKeyByPosition(inputRange, position) {
  */
 function renderSliders(inputRange) {
   const { classNames } = inputRange.props;
-  const sliders = [];
   const keys = getKeys(inputRange);
   const values = valueTransformer.valuesFromProps(inputRange);
   const percentages = valueTransformer.percentagesFromValues(inputRange, values);
 
-  for (const key of keys) {
+  return keys.map(function (key) {
     const value = values[key];
     const percentage = percentages[key];
     const ref = `slider${captialize(key)}`;
@@ -182,7 +172,7 @@ function renderSliders(inputRange) {
       minValue = values.min;
     }
 
-    const slider = (
+    return (
       <Slider
         ariaLabelledby={ inputRange.props.ariaLabelledby }
         ariaControls={ inputRange.props.ariaControls }
@@ -194,14 +184,10 @@ function renderSliders(inputRange) {
         onSliderMouseMove={ inputRange.handleSliderMouseMove }
         percentage={ percentage }
         ref={ ref }
-        type={ key }
+        type={ key }§
         value={ value } />
     );
-
-    sliders.push(slider);
-  }
-
-  return sliders;
+  })
 }
 
 /**
@@ -214,15 +200,13 @@ function renderHiddenInputs(inputRange) {
   const inputs = [];
   const keys = getKeys(inputRange);
 
-  for (const key of keys) {
+  return keys.map(function (key) {
     const name = inputRange.isMultiValue ? `${inputRange.props.name}${captialize(key)}` : inputRange.props.name;
 
-    const input = (
+    return (
       <input type="hidden" name={ name }/>
     );
-  }
-
-  return inputs;
+  });
 }
 
 /**
@@ -234,9 +218,6 @@ function renderHiddenInputs(inputRange) {
 export default class InputRange extends React.Component {
   constructor(props) {
     super(props);
-
-    // Private
-    internals.set(this, {});
 
     // Auto-bind
     autobind([
@@ -396,14 +377,14 @@ export default class InputRange extends React.Component {
     const key = getKeyFromSlider(this, slider);
 
     switch (event.keyCode) {
-    case KeyCode.LEFT_ARROW:
-    case KeyCode.DOWN_ARROW:
+    case LEFT_ARROW:
+    case DOWN_ARROW:
       event.preventDefault();
       this.decrementValue(key);
       break;
 
-    case KeyCode.RIGHT_ARROW:
-    case KeyCode.UP_ARROW:
+    case RIGHT_ARROW:
+    case UP_ARROW:
       event.preventDefault();
       this.incrementValue(key);
       break;
@@ -436,13 +417,11 @@ export default class InputRange extends React.Component {
    * @param {SyntheticEvent} event - User event
    */
   handleInteractionStart() {
-    const _this = internals.get(this);
-
-    if (!this.props.onChangeComplete || isDefined(_this.startValue)) {
+    if (!this.props.onChangeComplete || isDefined(this.startValue)) {
       return;
     }
 
-    _this.startValue = this.props.value;
+    this.startValue = this.props.value;
   }
 
   /**
@@ -450,17 +429,15 @@ export default class InputRange extends React.Component {
    * @param {SyntheticEvent} event - User event
    */
   handleInteractionEnd() {
-    const _this = internals.get(this);
-
-    if (!this.props.onChangeComplete || !isDefined(_this.startValue)) {
+    if (!this.props.onChangeComplete || !isDefined(this.startValue)) {
       return;
     }
 
-    if (_this.startValue !== this.props.value) {
+    if (this.startValue !== this.props.value) {
       this.props.onChangeComplete(this, this.props.value);
     }
 
-    _this.startValue = null;
+    this.startValue = null;
   }
 
   /**
